@@ -1,6 +1,10 @@
-let totalBookmarks = [];
+const store = {
+  bookmarks: [],
+  adding: false,
+  error: null,
+  filter: 0,
+};
 
-let adding = false;
-let editing = false;
-let error = null;
-let filter = 0;
+export default {
+  store,
+};
