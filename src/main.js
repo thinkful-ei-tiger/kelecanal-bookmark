@@ -6,6 +6,7 @@ import "./index.css";
 import STORE from "./store";
 import func from "./func";
 
+//wireframe
 //render page
 //create bookmark
 //get bookmark when clicked
