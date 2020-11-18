@@ -16,8 +16,5 @@ As a user you should be able to:
   - Bookmarks should be removable
   - URL and Title are required fields. If not input, they should throw an error.
   - Rating should be a drop down + submit.
-<<<<<<< HEAD
-=======
 
-Link to live app: 
->>>>>>> 3661fc6cfd16d0e9a75c108d4b5f5ed1dd69b2a2
+Link to live app:
