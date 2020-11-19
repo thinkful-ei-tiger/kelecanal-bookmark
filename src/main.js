@@ -3,8 +3,8 @@ import $ from "jquery";
 import api from "./api";
 import "normalize.css";
 import "./index.css";
-import STORE from "./store";
 import func from "./func";
+import store from "./store";
 
 //wireframe
 //render page
@@ -22,6 +22,15 @@ import func from "./func";
 //mobile first design, responsive
 //a11y best practices
 
-function main() {}
+const main = function () {
+    api
+        .retrieveBookmark()
+        .then((res) => res.json)
+        .then((res) => {
+            res.forEach((element => store.addBookmark(element));
+            func.render();
+        });
+    func.bindEventListeners();
+}
 
 $(main);
