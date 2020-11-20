@@ -5,14 +5,13 @@ let BASE_URL = "https://thinkful-list-api.herokuapp.com/kelecanal";
 const fetchAPI = function (...objs) {
   return fetch(...objs)
     .then((res) => res.json())
-    .then((getJSON) => (store.STORE.bookmarks = getJSON))
-  );
+    .then((getJSON) => (store.STORE.bookmarks = getJSON));
 };
 
 //GET (retrieve bookmark)
 
 const retrieveBookmark = function () {
-  return fetch(`${BASE_URL} + "/bookmarks"`)
+  return fetch(`${BASE_URL} + "/bookmarks"`);
 };
 
 //DELETE (delete bookmark)

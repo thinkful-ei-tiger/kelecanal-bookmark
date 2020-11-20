@@ -1,5 +1,3 @@
-import func from "./func";
-
 let bookmarks = [];
 let adding = false;
 let error = null;
@@ -7,7 +5,9 @@ let filter = false;
 let filteredBookmarks = [];
 
 const addBookmark = function (obj) {
+  //create for loop
   for (let i = 0; i < bookmarks.length; i++) {
+    //when looping thru bookmarks array, if value of bookmar
     if (bookmarks[i]) {
       bookmarks[i].expand = false;
     }
@@ -29,5 +29,15 @@ const setFilter = function () {};
 const err = function () {};
 
 export default {
-  store,
+  bookmarks,
+  adding,
+  error,
+  filter,
+  filteredBookmarks,
+  addBookmark,
+  expandBookmark,
+  deleteBookmark,
+  filterBookmarks,
+  setFilter,
+  err,
 };

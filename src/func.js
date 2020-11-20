@@ -1,6 +1,8 @@
 import $ from "jquery";
+
 import "normalize.css";
 import "./style.css";
+
 import api from "./api";
 import store from "./store";
 
@@ -10,7 +12,7 @@ const initialBookmarkPage = function () {
       <h1>Store Your Bookmarks!</h1>
     </header>
     <div class="first-container">
-    <div class="bookmark-container">
+      <div class="bookmark-container">
          <section class="bookmark-controls">
              <button class="add-button jq-add-button">+ Add New!</button>
              <div class="filter-container">
@@ -24,15 +26,16 @@ const initialBookmarkPage = function () {
                  </select>
              </div>
          </section>
+         <section class="bm-container jq-bm-container">
+         </section>
+      </div>
     </div>
-    </div>
-
-  `);
+    `);
 };
 
+//form that shows bookmarks are toggled
 const handleBookmarkToggleForm = function () {
   return `
-  <main id = "main">
         <div class ="add-bookmark-container">
             <form class="add-bookmark-form">
                 <fieldset role="group">
@@ -67,27 +70,50 @@ const handleBookmarkToggleForm = function () {
             </fieldset>
             </form>        
         </div>
-    </main>
    `;
 };
 
-const handleAddNewBookmark = function () {};
+const render = function () {
+  const bookmark = store.STORE.bookmarks;
 
-const handleNewBookmarkSubmit = function () {};
+  $("#main").html(initialBookmarkPage());
+  //if adding bookmark, render add bookmark page
+  if (store.adding) {
+    $(".bookmark-controls").toggleClass(".hide-bookmark-display");
+    $('.jq-bookmark-container').html(handleBookmarkToggleForm());
+    bindEventListeners();
+  } else if (store.filter) {
+    let fBookmarks = [...store.filteredBookmarks];
+    const fBookmarksPg = 
+
+  }
+  //if there are added bookmarks, render those
+};
+
+
+//
+const handleAddNewBookmark = function () {
+  $("#main").on("click", ".jq-add-button", () => {
+    if (!store.adding) {
+      store.adding = true;
+    }
+    render();
+  });
+};
+
+const handleNewBookmarkSubmit = function () {
+  $(".add-bookmark-form").on("submit", (event) => {
+    event.preventDefault();
+  });
+};
 
 const handleError = function () {};
 
 const handleBookmarkDelete = function () {};
 
-const render = function () {
-  $("#main").html(initialBookmarkPage());
-  //if adding bookmark, render add bookmark page
-
-  //if there are added bookmarks, render those
-};
-
 const bindEventListeners = function () {
   initialBookmarkPage();
+  handleBookmarkToggleForm();
 };
 
 export default {
