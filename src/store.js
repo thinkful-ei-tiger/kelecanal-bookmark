@@ -7,7 +7,7 @@ let filteredBookmarks = [];
 const addBookmark = function (obj) {
   //create for loop
   for (let i = 0; i < bookmarks.length; i++) {
-    //when looping thru bookmarks array, if value of bookmar
+    //when looping thru bookmarks array, if value of bookmark
     if (bookmarks[i]) {
       bookmarks[i].expand = false;
     }
@@ -18,15 +18,40 @@ const addBookmark = function (obj) {
   this.adding = false;
 };
 
-const expandBookmark = function () {};
+const expandBookmark = (obj) => {
+  //return val that passes
+  let exBm = bookmarks.find((bookmark) => bookmark.obj === obj);
+  if (exBm.expand) {
+    exBm.expand = false;
+  } else {
+    exBm.expand = true;
+  }
+};
 
-const deleteBookmark = function () {};
+const deleteBookmark = (obj) => {
+  this.bookmarks = this.bookmarks.filter((bookmark) => bookmark.obj !== obj);
+};
 
-const filterBookmarks = function () {};
+const filterBookmarks = (strValue) => {
+  this.filter = true;
+  this.bookmarks.forEach((bookmark) => {
+    if (bookmark.rating >= strValue) {
+      this.filteredBookmarks.push(bookmark);
+    }
+  });
+};
 
-const setFilter = function () {};
+const setAdding = (inp) => {
+  this.adding = inp;
+};
 
-const err = function () {};
+const setFilter = function (inp) {
+  this.filter = inp;
+};
+
+const setErr = (inp) => {
+  this.error = inp;
+};
 
 export default {
   bookmarks,
@@ -38,6 +63,7 @@ export default {
   expandBookmark,
   deleteBookmark,
   filterBookmarks,
+  setAdding,
   setFilter,
-  err,
+  setErr,
 };

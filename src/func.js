@@ -6,9 +6,15 @@ import "./style.css";
 import api from "./api";
 import store from "./store";
 
+/* 
+
+TEMPLATES
+
+*/
+
 //int view of page
 const initialBookmarkPage = () => {
-  $("#main").html(`
+  return $("main").html(`
     <header>
       <h1>Store Your Bookmarks!</h1>
     </header>
@@ -35,7 +41,7 @@ const initialBookmarkPage = () => {
 };
 
 //form that shows bookmarks are toggled
-const handleBookmarkToggleForm = function () {
+const handleBookmarkToggleForm = () => {
   return `
         <div class ="add-bookmark-container">
             <form class="add-bookmark-form">
@@ -74,7 +80,7 @@ const handleBookmarkToggleForm = function () {
    `;
 };
 
-//bookmark view whem rendered
+//bookmark view when rendered
 const bookmarkHTML = (bookmark) => {
   return `
     <div class = "collapsed-bm-container">
@@ -92,13 +98,13 @@ const bookmarkHTML = (bookmark) => {
   `;
 };
 
-// //star rating
-// const starRating = (bookmark) => {
-//   let inptRating = bookmark.rating;
-//   let;
-// };
+/* 
 
-//add new bookmark to list 
+EVENT LISTENERS
+
+*/
+
+//add new bookmark to list
 const handleAddNewBookmark = function () {
   $("#main").on("click", ".jq-add-button", () => {
     if (!store.adding) {
@@ -108,43 +114,87 @@ const handleAddNewBookmark = function () {
   });
 };
 
+//submitting new bookmarks
 const handleNewBookmarkSubmit = function () {
   $(".add-bookmark-form").on("submit", (event) => {
     event.preventDefault();
+    $(".jq-bm-container").toggleClass("hidden");
+    api.saveBookmark().then(() => {
+      $(".first-container").toggleClass("hidden");
+      store.adding = false;
+      render();
+    });
   });
 };
 
-const handleError = function () {};
-
+//deleting bookmarks
 const handleBookmarkDelete = function () {
-  $('.jq-bm-delete').on("click", (event) => {
-    let idDelete = $(event.currentTarget).closest('.jq-bm-container').attr('idDelete');
-    api.deleteBookmark(idDelete)
-    .then(() => {
+  $(".jq-bm-delete").on("click", (event) => {
+    let idDelete = $(event.currentTarget)
+      .closest(".jq-bm-container")
+      .attr("idDelete");
+    api.deleteBookmark(idDelete).then(() => {
       store.deleteBookmark(idDelete);
       render();
     });
-  };
+  });
 };
 
-const render = function () {
-  //render main html
-  $("#main").html(initialBookmarkPage());
+/* 
 
+BOOKMARK DISPLAY
+
+*/
+
+const displaySorted = function (marks) {
+  let list = marks;
+  let html = "";
+  for (let i = 0; i < list.length; i++) {
+    html += `
+    <div id = ${list[i].id} class "bmList">
+    
+    `;
+  }
+};
+
+/* 
+
+RATING
+
+*/
+
+/* 
+
+RENDERING
+
+*/
+
+function render() {
   //if adding bookmark, render add bookmark page
 
   if (store.adding) {
     $(".bookmark-controls").toggleClass(".hide-bookmark-display");
     $(".jq-bookmark-container").html(handleBookmarkToggleForm());
-    bindEventListeners();
 
     //if there are previous bookmarks, render those
-  } else if (store.filter) {
-    let fBookmarks = [...store.filteredBookmarks];
-    const fBookmarksPg = generate;
+  } else {
+    initialBookmarkPage();
+    bookmarkHTML();
+    $("#filter").prop("selectedIndex", 5);
   }
-  //if there are added bookmarks, render those
-};
+
+  if (store.bookmarks.length > 0) {
+    $(".add-bookmark-container").addClass("hidden");
+  } else {
+    $(".add-bookmark-container").removeClass("hidden");
+  }
+}
+
+/* 
+
+BINDING EVENT LISTENERS
+
+*/
 
 const bindEventListeners = function () {
   initialBookmarkPage();
@@ -152,9 +202,14 @@ const bindEventListeners = function () {
   handleAddNewBookmark();
 };
 
+/* 
+
+EXPORT DEFAULT
+
+*/
+
 export default {
   bindEventListeners,
-  render,
 };
 
 //things to do
