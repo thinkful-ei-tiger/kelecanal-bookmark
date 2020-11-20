@@ -13,7 +13,7 @@ TEMPLATES
 */
 
 //int view of page
-const initialBookmarkPage = () => {
+const initialBookmarkPage = function () {
   return $("#main").html(`
     <header>
       <h1>Store Your Bookmarks!</h1>
@@ -41,7 +41,7 @@ const initialBookmarkPage = () => {
 };
 
 //form that shows bookmarks are toggled
-const handleBookmarkToggleForm = () => {
+const handleBookmarkToggleForm = function () {
   return `
         <div class ="add-bookmark-container">
             <form class="add-bookmark-form">
@@ -81,12 +81,17 @@ const handleBookmarkToggleForm = () => {
 };
 
 //bookmark view when rendered
-const bookmarkHTML = (bookmark) => {
+const bookmarkHTML = function (bookmark) {
+  let togBookmark = !bookmark.expand ? "hide-bookmark-display" : "";
+  let rateBookmark = starRating(bookmark);
   return `
     <div class = "collapsed-bm-container">
       <button class = "expnd-bm-button jq-bm-expand">See Details</button>
       <h3 class = "bm-title jq-bm-title">${bookmark.title}</h3>
       <div class = "jq-bm-rating">${starRating}</div>
+      <div class = "bm-rating jq-bm-rating">
+        ${rateBookmark}
+      </div>
       <div class = "expnd-bm-container jq-ex-bm-container">
         <p>Description: ${bookmark.description}</p>
       </div>
@@ -103,6 +108,14 @@ const bookmarkHTML = (bookmark) => {
 EVENT LISTENERS
 
 */
+
+//stringify json data
+const stringJson = function (inp) {
+  const bmData = new bmData(inp);
+  const mark = {};
+  bmData.forEach((ent, name) => (mark[name] = ent));
+  return JSON.stringify(mark);
+};
 
 //add new bookmark to list
 const handleAddNewBookmark = function () {
@@ -163,13 +176,27 @@ RATING
 
 */
 
+const starRating = (bkmark) => {
+  let starUp = bkmark.rating;
+  let starDown = 5 - starUp;
+
+  const starUpShow = `<span class = "star-up"></span>`;
+  const starDownShow = `<span class = "star-down"></span>`;
+
+  let starRatings = starUpShow.repeat(starUp) + starDownShow.repeat(starDown);
+
+  return starRatings;
+};
+
 /* 
 
 RENDERING
 
 */
 
-function render() {
+const render = function () {
+  $("#main").html(initialBookmarkPage());
+
   //if adding bookmark, render add bookmark page
 
   if (store.adding) {
@@ -188,7 +215,7 @@ function render() {
   } else {
     $(".add-bookmark-container").removeClass("hidden");
   }
-}
+};
 
 /* 
 
@@ -200,6 +227,8 @@ const bindEventListeners = function () {
   initialBookmarkPage();
   handleBookmarkToggleForm();
   handleAddNewBookmark();
+  handleBookmarkDelete();
+  handleNewBookmarkSubmit();
 };
 
 /* 
@@ -210,89 +239,5 @@ EXPORT DEFAULT
 
 export default {
   bindEventListeners,
+  render,
 };
-
-//things to do
-//render page with inactive bookmarks, add new bookmark button, view bookmarks button
-//PAGE RENDER INITIAL: (TITLE, ADD/VIEW BUTTONS (fields appear when clicked), MOST RECENTLY SUBMITTED BOOKMARKS)
-// function renderBookmarkApp(event) {
-//   //render title (in html), add & view buttons, and recently submitted bookmarks
-//   event.preventDefault();
-//   return ` <div class="renderedPage">
-//     <h2>Bookmarks</h2>
-//     <section class="buttons">
-//         <div class="newButton">
-//             <button id="new">+ New Bookmark</button>
-//             <button id="view">View Bookmarks</button>
-//         </div>
-//     </section>
-//     <section class="collapsedBookmarks">
-//         <div class="bookmarkInitial">
-//             <p>something</p>
-//         </div>
-//         <div class="bookmarkInitial">
-//             <p>something</p>
-//         </div>
-//         <div class="bookmarkInitial">
-//             <p>something</p>
-//         </div>
-//     </section>
-//     </div>`;
-// }
-// //render
-// //title, add button, view button, bookmarks recently added
-
-// function handleAddBookmark() {
-//   //function to add new bookmarks to the list
-//   $(".newbookmark").on("click", "#", function (evt) {
-//     evt.preventDefault();
-//     renderBookmarkApp();
-//   });
-// }
-
-// function handleBookmarkToggle() {
-//   //function to toggle the open and closing of bookmark add button/views button
-//   $(".newButton")
-//     .on("click", () => {
-//       $("#bookmark-form").show();
-//     })
-//     .on("click", () => {
-//       $("#bookmark-form").hide();
-//     });
-//   $();
-// }
-
-// function handleNewBookmarkSubmit() {
-//   $("#newUserBookmark").on("submit", function (event) {
-//     event.preventDefault;
-//     const newBookmarkName = $(".userBookmark").val();
-//   });
-// }
-
-// let newButton = function buttonActive() {
-//   $(".newButtons").on("click", () => {
-//     console.log("newThingsComingSoon");
-//   });
-// };
-
-// const bindEventListeners = function () {
-//   renderBookmarkApp();
-//   addBookmarkToList();
-//   handleBookmarkToggle();
-//   handleNewBookmarkSubmit();
-// };
-// //submit new bookmark (text box, submit button, star rating) mouseover toggle
-// //NEW BOOKMARK PAGE: (URL FORM, SUBMIT BUTTON, DESCRIPTION FIELD, STAR RATING (DROP DOWN??))
-// // handleNewBookmarkSubmit (new bookmark submission)
-// // addBookmark (add bookmark to list of bookmarks)
-// //
-// //when submitting bookmark, fields may not be blank for star rating OR description
-// //may add "Favorite has been added" page
-// //view bookmarks (search bar, enter, filter by dropdown), mouseover toggle
-// //VIEW BOOKMARKS PAGE: (SEARCH BAR, SUBMIT BUTTON, DROPDOWN FILTER BY RATING, SUBMIT)
-// //view bookmarks (no filtering) MUST CONTAIN: URL (may be link), star rating, and detailed description
-// //DETAILED BOOKMARKS (ON CLICK) PAGE: (URL LINK, STAR RATING, DETAILED DESCRIPTION)
-
-// export default {
-//   thing,
-// };
