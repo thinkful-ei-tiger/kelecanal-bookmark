@@ -14,7 +14,7 @@ TEMPLATES
 
 //int view of page
 const initialBookmarkPage = () => {
-  return $("main").html(`
+  return $("#main").html(`
     <header>
       <h1>Store Your Bookmarks!</h1>
     </header>
