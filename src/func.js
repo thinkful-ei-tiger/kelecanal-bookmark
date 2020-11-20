@@ -6,7 +6,8 @@ import "./style.css";
 import api from "./api";
 import store from "./store";
 
-const initialBookmarkPage = function () {
+//int view of page
+const initialBookmarkPage = () => {
   $("#main").html(`
     <header>
       <h1>Store Your Bookmarks!</h1>
@@ -73,25 +74,31 @@ const handleBookmarkToggleForm = function () {
    `;
 };
 
-const render = function () {
-  const bookmark = store.STORE.bookmarks;
-
-  $("#main").html(initialBookmarkPage());
-  //if adding bookmark, render add bookmark page
-  if (store.adding) {
-    $(".bookmark-controls").toggleClass(".hide-bookmark-display");
-    $('.jq-bookmark-container').html(handleBookmarkToggleForm());
-    bindEventListeners();
-  } else if (store.filter) {
-    let fBookmarks = [...store.filteredBookmarks];
-    const fBookmarksPg = 
-
-  }
-  //if there are added bookmarks, render those
+//bookmark view whem rendered
+const bookmarkHTML = (bookmark) => {
+  return `
+    <div class = "collapsed-bm-container">
+      <button class = "expnd-bm-button jq-bm-expand">See Details</button>
+      <h3 class = "bm-title jq-bm-title">${bookmark.title}</h3>
+      <div class = "jq-bm-rating">${starRating}</div>
+      <div class = "expnd-bm-container jq-ex-bm-container">
+        <p>Description: ${bookmark.description}</p>
+      </div>
+      <div class = "extLink-delete">
+        <a class = "jq-bm-url" href=${bookmark.url} target="_blank">Click to visit</a>
+        <button class = "jq-bm-delete">Delete</button>
+      </div>
+    </div>
+  `;
 };
 
+// //star rating
+// const starRating = (bookmark) => {
+//   let inptRating = bookmark.rating;
+//   let;
+// };
 
-//
+//add new bookmark to list 
 const handleAddNewBookmark = function () {
   $("#main").on("click", ".jq-add-button", () => {
     if (!store.adding) {
@@ -109,11 +116,40 @@ const handleNewBookmarkSubmit = function () {
 
 const handleError = function () {};
 
-const handleBookmarkDelete = function () {};
+const handleBookmarkDelete = function () {
+  $('.jq-bm-delete').on("click", (event) => {
+    let idDelete = $(event.currentTarget).closest('.jq-bm-container').attr('idDelete');
+    api.deleteBookmark(idDelete)
+    .then(() => {
+      store.deleteBookmark(idDelete);
+      render();
+    });
+  };
+};
+
+const render = function () {
+  //render main html
+  $("#main").html(initialBookmarkPage());
+
+  //if adding bookmark, render add bookmark page
+
+  if (store.adding) {
+    $(".bookmark-controls").toggleClass(".hide-bookmark-display");
+    $(".jq-bookmark-container").html(handleBookmarkToggleForm());
+    bindEventListeners();
+
+    //if there are previous bookmarks, render those
+  } else if (store.filter) {
+    let fBookmarks = [...store.filteredBookmarks];
+    const fBookmarksPg = generate;
+  }
+  //if there are added bookmarks, render those
+};
 
 const bindEventListeners = function () {
   initialBookmarkPage();
   handleBookmarkToggleForm();
+  handleAddNewBookmark();
 };
 
 export default {
